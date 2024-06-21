@@ -23,8 +23,13 @@
 
     // Button event listener
     document.getElementById('helloBtn').addEventListener('click', function() {
-      fetch('https://your-railway-app-url.com/hello')
-        .then(response => response.text())
+      fetch('https://your-app-name.up.railway.app/hello') // Opdater denne linje med din URL
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.text();
+        })
         .then(data => {
           document.getElementById('output').innerText = data;
         })

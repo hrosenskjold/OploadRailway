@@ -43,38 +43,37 @@
             url: 'https://services6.arcgis.com/QHir1urgnGYroCLG/arcgis/rest/services/PG_versioneret_110624/FeatureServer/0'
         }).addTo(map);
 
-document.getElementById('upload-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-    var formData = new FormData(this);
-    var fileInput = document.querySelector('input[type="file"]');
-    var file = fileInput.files[0];
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            var fileInput = document.querySelector('input[type="file"]');
+            var file = fileInput.files[0];
 
-    // Read the file in the browser using Shapefile JS
-    shapefile.open(file)
-        .then(source => source.read()
-            .then(function log(result) {
-                if (result.done) return;
-                
-                // Add the feature to the map
-                L.geoJSON(result.value).addTo(map);
-                
-                return source.read().then(log);
+            // Read the file in the browser using Shapefile JS
+            shapefile.open(file)
+                .then(source => source.read()
+                    .then(function log(result) {
+                        if (result.done) return;
+                        
+                        // Add the feature to the map
+                        L.geoJSON(result.value).addTo(map);
+                        
+                        return source.read().then(log);
+                    })
+                )
+                .catch(error => console.error('Error:', error));
+
+            // Upload the file to the server
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
             })
-        )
-        .catch(error => console.error('Error:', error));
-
-    // Upload the file to the server
-    fetch('/upload', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message || data.error);
-    })
-    .catch(error => console.error('Error:', error));
-});
-
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
 </body>
 </html>

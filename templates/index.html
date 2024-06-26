@@ -18,7 +18,10 @@
     <h1>Opdatering af projektgrænse</h1>
     <div id="map"></div>
     <div class="button-container">
-        <button onclick="sayHello()">Click Me</button>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".zip" required />
+            <button type="submit">Upload Shapefile</button>
+        </form>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -37,14 +40,19 @@
             url: 'https://services6.arcgis.com/QHir1urgnGYroCLG/arcgis/rest/services/PG_versioneret_110624/FeatureServer/0'
         }).addTo(map);
 
-        function sayHello() {
-            fetch('/hello')
-                .then(response => response.json())
-                .then(data => {
-                    alert(data.message);
-                })
-                .catch(error => console.error('Error:', error));
-        }
+        document.getElementById('upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+            })
+            .catch(error => console.error('Error:', error));
+        });
     </script>
 </body>
 </html>

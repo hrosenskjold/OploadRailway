@@ -55,6 +55,9 @@
                     .then(function log(result) {
                         if (result.done) return;
                         
+                        // Log the GeoJSON data to the console
+                        console.log(result.value);
+                        
                         // Add the feature to the map
                         L.geoJSON(result.value).addTo(map);
                         

@@ -62,8 +62,9 @@ def upload_file():
                 
                 # Add features to ArcGIS layer
                 arcgis_url = 'https://services6.arcgis.com/QHir1urgnGYroCLG/arcgis/rest/services/PG_versioneret_110624/FeatureServer/0/addFeatures'
-                response = requests.post(arcgis_url, json={"features": features})
-                
+                #response = requests.post(arcgis_url, json={"features": features})
+                response = requests.post(url, data={"features": json.dumps([feature]), "f": "json"})
+
                 if response.status_code == 200:
                     return jsonify(message='File successfully uploaded and processed'), 200
                 else:

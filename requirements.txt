@@ -1,6 +1,6 @@
 Flask==2.0.3
 Werkzeug==2.0.3
 gunicorn
-shapefile
+pyshp==2.1.3
 requests
 geopandas

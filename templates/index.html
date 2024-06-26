@@ -48,6 +48,8 @@
             var formData = new FormData(this);
             var fileInput = document.querySelector('input[type="file"]');
             var file = fileInput.files[0];
+            console.log(file);
+
 
             // Read the file in the browser using Shapefile JS
             shapefile.open(file)

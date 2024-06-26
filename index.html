@@ -1,42 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Leaflet Kort</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <title>Leaflet Map with Flask</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-  <div id="map" style="width: 100%; height: 400px;"></div>
-  <button id="helloBtn">Kør Hello World</button>
-  <p id="output"></p>
+    <h1>Leaflet Map</h1>
+    <div id="map"></div>
+    <div class="button-container">
+        <button onclick="sayHello()">Click Me</button>
+    </div>
 
-  <script>
-    // Initialize the map
-    var map = L.map('map').setView([55.6761, 12.5683], 13); // Centered on Copenhagen
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Initialize the map
+        var map = L.map('map').setView([51.505, -0.09], 13);
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+        // Set up the OSM layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+        }).addTo(map);
 
-    // Button event listener
-    document.getElementById('helloBtn').addEventListener('click', function() {
-      fetch('oploadrailway-production.up.railway.app') // Opdater denne linje med din URL
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok: ' + response.statusText);
-          }
-          return response.text();
-        })
-        .then(data => {
-          document.getElementById('output').innerText = data;
-        })
-        .catch(error => {
-          document.getElementById('output').innerText = 'Error: ' + error;
-        });
-    });
-  </script>
+        function sayHello() {
+            fetch('/hello')
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
 </body>
 </html>
